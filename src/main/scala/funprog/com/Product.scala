@@ -1,3 +1,5 @@
+package funprog.com
+
 object Product {
   def main(args: Array[String]) {
     println(product(x => x)(2, 5))

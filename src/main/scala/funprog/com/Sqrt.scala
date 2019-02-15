@@ -1,3 +1,5 @@
+package funprog.com
+
 object Sqrt {
   def main(args: Array[String]) {
     println(sqrt(2))

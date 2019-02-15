@@ -1,3 +1,5 @@
+package funprog.com
+
 object Factorial {
   def main(args: Array[String]) {
     println(factorial(2))

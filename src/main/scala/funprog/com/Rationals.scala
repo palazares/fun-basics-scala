@@ -1,3 +1,5 @@
+package funprog.com
+
 object Rationals {
 
   def main(args: Array[String]) {
@@ -13,16 +15,16 @@ object Rationals {
     private def gcd(a: Int, b: Int): Int = if (b == 0) a else gcd (b, a % b)
     private val g = gcd (x, y)
 
-    val numer = x / g
-    val denom = y / g
+    val numer: Int = x / g
+    val denom: Int = y / g
 
-    def add(that: Rational) = new Rational(numer * that.denom + that.numer * denom, denom * that.denom)
-    def neg = new Rational(-numer, denom)
-    def sub(that: Rational) = add(that.neg)
+    def add(that: Rational): Rational = new Rational(numer * that.denom + that.numer * denom, denom * that.denom)
+    def neg: Rational = new Rational(-numer, denom)
+    def sub(that: Rational): Rational = add(that.neg)
     def mult(that: Rational) = new Rational(numer * that.numer, denom * that.denom)
     def div(that: Rational) = new Rational(numer * that.denom, denom * that.numer)
-    def less(that: Rational) = numer * that.denom < that.numer * denom
-    def max(that: Rational) = if(this.less(that)) that else this
+    def less(that: Rational): Boolean = numer * that.denom < that.numer * denom
+    def max(that: Rational): Rational = if(this.less(that)) that else this
 
     override def toString: String = numer + "/" + denom
   }

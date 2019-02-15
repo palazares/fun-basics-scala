@@ -1,3 +1,5 @@
+package funprog.com
+
 object Parentheses {
   def main(args: Array[String]): Unit = {
     println(isBalancedParentheses("(sdf)".toList))
@@ -11,11 +13,11 @@ object Parentheses {
     println(isBalancedParentheses("sadf)(---".toList))
   }
 
-  def isBalancedParentheses(str: List[Char]) = {
+  def isBalancedParentheses(str: List[Char]): Boolean = {
     def charValue(c: Char) = if ( c == '(') 1 else if (c == ')') -1 else 0
     def internalBalance(parenthesesNum: Int, s: List[Char]): Boolean =
-      if ( parenthesesNum < 0 || parenthesesNum != 0 && s.length == 0) false
-      else if (parenthesesNum == 0 && s.length == 0) true
+      if ( parenthesesNum < 0 || parenthesesNum != 0 && s.isEmpty) false
+      else if (parenthesesNum == 0 && s.isEmpty) true
       else internalBalance(parenthesesNum + charValue(s.head), s.tail)
     internalBalance(0, str)
   }
