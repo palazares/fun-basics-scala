@@ -2,12 +2,14 @@ package funprog.com.objsets
 
 class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
 
-  def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet = ???
+  def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet = {
+    val newAcc = if (p(elem)) acc.incl(elem) else acc
+    left.filterAcc(p, acc).union(right.filterAcc(p, acc)).union(newAcc)
+  }
 
-
-  /**
-    * The following methods are already implemented
-    */
+  def filter(p: Tweet => Boolean): TweetSet =
+    if (p(elem)) left.filter(p).union(right.filter(p)).incl(elem)
+    else left.filter(p).union(right.filter(p))
 
   def contains(x: Tweet): Boolean =
     if (x.text < elem.text) left.contains(x)
@@ -29,5 +31,25 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
     f(elem)
     left.foreach(f)
     right.foreach(f)
+  }
+
+  def union(that: TweetSet): TweetSet =
+    if(that.isEmpty) this
+    else left.union(right.union(that.incl(elem)))
+
+  def isEmpty: Boolean = false
+
+  def mostRetweeted: Tweet = mostInternal((a,b) => if (a.retweets > b.retweets) a else b)
+
+  private def mostInternal(compare: (Tweet, Tweet) => Tweet): Tweet = {
+    if (right.isEmpty && left.isEmpty) elem
+    else if (right.isEmpty) compare(elem, left.mostRetweeted)
+    else if (left.isEmpty) compare(elem, right.mostRetweeted)
+    else compare(elem, compare(left.mostRetweeted, right.mostRetweeted))
+  }
+
+  def descendingByRetweet: TweetList = {
+    val toRemove = mostRetweeted
+    new Cons(toRemove, remove(toRemove).descendingByRetweet)
   }
 }
