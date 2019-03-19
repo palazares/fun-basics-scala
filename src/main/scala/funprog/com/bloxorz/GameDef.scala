@@ -31,10 +31,10 @@ trait GameDef {
    */
   case class Pos(x: Int, y: Int) {
     /** The position obtained by changing the `x` coordinate by `d` */
-    def dx(d: Int) = copy(x = x + d)
+    def dx(d: Int): Pos = copy(x = x + d)
 
     /** The position obtained by changing the `y` coordinate by `d` */
-    def dy(d: Int) = copy(y = y + d)
+    def dy(d: Int): Pos = copy(y = y + d)
   }
 
   /**
@@ -82,7 +82,7 @@ trait GameDef {
    * This function returns the block at the start position of
    * the game.
    */
-  def startBlock: Block = ???
+  def startBlock: Block = Block(startPos, startPos)
 
   /**
    * A block is represented by the position of the two cubes that
@@ -108,22 +108,22 @@ trait GameDef {
 
 
     /** The block obtained by moving left */
-    def left = if (isStanding)         dy(-2, -1)
+    def left: Block = if (isStanding)         dy(-2, -1)
                else if (b1.x == b2.x)  dy(-1, -2)
                else                    dy(-1, -1)
 
     /** The block obtained by moving right */
-    def right = if (isStanding)        dy(1, 2)
+    def right: Block = if (isStanding)        dy(1, 2)
                 else if (b1.x == b2.x) dy(2, 1)
                 else                   dy(1, 1)
 
     /** The block obtained by moving up */
-    def up = if (isStanding)           dx(-2, -1)
+    def up: Block = if (isStanding)           dx(-2, -1)
              else if (b1.x == b2.x)    dx(-1, -1)
              else                      dx(-1, -2)
 
     /** The block obtained by moving down */
-    def down = if (isStanding)         dx(1, 2)
+    def down: Block = if (isStanding)         dx(1, 2)
                else if (b1.x == b2.x)  dx(1, 1)
                else                    dx(2, 1)
 
@@ -132,23 +132,23 @@ trait GameDef {
      * Returns the list of blocks that can be obtained by moving
      * the current block, together with the corresponding move.
      */
-    def neighbors: List[(Block, Move)] = ???
+    def neighbors: List[(Block, Move)] = List((left, Left), (right, Right), (down, Down), (up, Up))
 
     /**
      * Returns the list of positions reachable from the current block
      * which are inside the terrain.
      */
-    def legalNeighbors: List[(Block, Move)] = ???
+    def legalNeighbors: List[(Block, Move)] = neighbors.filter(n => n._1.isLegal)
 
     /**
      * Returns `true` if the block is standing.
      */
-    def isStanding: Boolean = ???
+    def isStanding: Boolean = b1.x == b2.x && b1.y == b2.y
 
     /**
      * Returns `true` if the block is entirely inside the terrain.
      */
-    def isLegal: Boolean = ???
+    def isLegal: Boolean = terrain(b1) && terrain(b2)
 
   }
 }
